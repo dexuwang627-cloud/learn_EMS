@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { HelpCircle, AlertTriangle, Cpu, Network, CheckCircle2, XCircle, Code, RefreshCcw, Lightbulb, Star } from 'lucide-react';
+import { HelpCircle, AlertTriangle, Cpu, Network, CheckCircle2, XCircle, Code, RefreshCcw, Lightbulb, Star, Layers } from 'lucide-react';
 
 export default function ModbusPuzzles() {
     const [selectedOption, setSelectedOption] = useState(null);
