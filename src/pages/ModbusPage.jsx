@@ -16,9 +16,14 @@ const ConceptLink = ({ to, children }) => (
 const ModbusPage = () => {
     const [selectedOption, setSelectedOption] = useState(null);
     const [selectedMappingOption, setSelectedMappingOption] = useState(null);
+    const [selectedBossOption, setSelectedBossOption] = useState(null);
 
     const handleOptionSelect = (option) => {
         setSelectedOption(option);
+    };
+
+    const handleBossOptionSelect = (option) => {
+        setSelectedBossOption(option);
     };
 
     return (
@@ -723,6 +728,174 @@ const ModbusPage = () => {
                         </ul>
                     </div>
                 </div>
+            </section>
+
+            {/* Final Boss Interactive Puzzle */}
+            <section className="bg-zinc-800/80 border border-zinc-700/80 rounded-2xl p-6 md:p-8 mt-12 relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-500 via-purple-500 to-red-500"></div>
+                <div className="flex items-center gap-3 mb-6">
+                    <div className="p-2 bg-red-500/20 text-red-400 rounded-lg">
+                        <AlertTriangle className="w-6 h-6 animate-pulse" />
+                    </div>
+                    <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-purple-400">
+                        大魔王綜合測驗：吵鬧的智慧電表
+                    </h2>
+                </div>
+
+                <div className="prose prose-invert max-w-none mb-8">
+                    <p className="text-stone-300 leading-relaxed text-lg">
+                        這題綜合測驗，將會同時考驗你 <strong className="text-amber-400">第一階段：Channel 身分證</strong> 與 <strong className="text-amber-400">第三階段：Modbus 任務映射</strong> 的融會貫通能力。準備接招！
+                    </p>
+
+                    <div className="bg-zinc-900 rounded-xl p-5 border border-zinc-700 mt-6">
+                        <h4 className="text-amber-400 font-semibold mb-3 flex items-center gap-2">
+                            <Building2 className="w-5 h-5" />
+                            【案發現場】
+                        </h4>
+                        <p className="text-stone-300">
+                            工廠買了一台全新的「智慧電表 (Smart Meter)」，採用 RS485 通訊並透過 Gateway 連接。電表原廠的 Modbus 手冊提供以下資訊：
+                        </p>
+                        <ul className="text-stone-300 space-y-2 mt-3 list-disc list-inside">
+                            <li><strong className="text-amber-200">地址 40010：</strong> 當前總耗電量 (僅供讀取)</li>
+                            <li><strong className="text-amber-200">地址 40050：</strong> 警報解除開關 (寫入 1 即可解除電表上的蜂鳴器警報；平時讀取會顯示目前的警報狀態)</li>
+                        </ul>
+                    </div>
+
+                    <div className="mt-8">
+                        <h4 className="text-blue-300 font-semibold mb-3">你的 Protocol Mapping 程式碼：</h4>
+                        <div className="bg-[#1e1e1e] rounded-xl p-4 overflow-x-auto border border-zinc-700 shadow-inner">
+                            <pre className="text-sm font-mono text-stone-300 leading-relaxed max-w-full"><code className="block w-full">{`@Override
+protected ModbusProtocol defineModbusProtocol() {
+    return new ModbusProtocol(this,
+        // 📖 任務一：每秒讀取現況
+        new FC3ReadRegistersTask(40010, Priority.HIGH,
+            m(Meter.ChannelId.ACTIVE_POWER, new UnsignedWordElement(40010)),
+            m(Meter.ChannelId.ALARM_STATUS, new UnsignedWordElement(40050)) 
+        ),
+
+        // ✍️ 任務二：寫入警報解除命令
+        new FC16WriteRegistersTask(40050,
+            m(Meter.ChannelId.ALARM_STATUS, new UnsignedWordElement(40050)) 
+        )
+    );
+}`}</code></pre>
+                        </div>
+                    </div>
+
+                    <div className="bg-red-900/10 border-l-4 border-red-500 p-4 mt-8 rounded-r-lg">
+                        <h4 className="text-red-400 font-semibold flex items-center gap-2">
+                            <AlertTriangle className="w-5 h-5" />
+                            緊急狀況！
+                        </h4>
+                        <p className="text-stone-300 mt-2">
+                            程式上線後，你發現可以正常讀到耗電量，也可以讀到警報狀態。但是！<strong className="text-stone-100">當你透過 OpenEMS UI 按下「解除警報」按鈕時，現場的電表依然嗶嗶叫個不停，完全無法寫入！</strong>
+                        </p>
+                        <p className="text-stone-300 mt-2">
+                            而且，如果你打開 OpenEMS 系統的 Log 紀錄，只要你按下按鈕，就會跳出一行紅色的 Error：
+                        </p>
+                        <code className="block bg-black/50 p-2 text-red-400 mt-2 rounded border border-red-900/30 text-xs md:text-sm">
+                            Write-Channel [Meter.ALARM_STATUS] is not an instance of WriteChannel. Cannot set next write value.
+                        </code>
+                    </div>
+
+                    <h4 className="text-xl font-semibold text-stone-100 mt-8 mb-4">請問這個致命的 Bug 出在哪裡？</h4>
+                </div>
+
+                {/* Boss Options */}
+                <div className="space-y-4">
+                    {/* Option A */}
+                    <button
+                        onClick={() => handleBossOptionSelect('A')}
+                        className={`w-full text-left p-5 rounded-xl border transition-all duration-200 ${selectedBossOption === 'A'
+                            ? 'bg-red-900/20 border-red-500/50'
+                            : 'bg-zinc-800 border-zinc-700/50 hover:border-amber-500/30 hover:bg-zinc-700/30'
+                            }`}
+                    >
+                        <div className="flex gap-4">
+                            <div className={`mt-0.5 w-6 h-6 shrink-0 rounded-full border-2 flex items-center justify-center ${selectedBossOption === 'A' ? 'border-red-400' : 'border-stone-500'}`}>
+                                {selectedBossOption === 'A' && <div className="w-3 h-3 rounded-full bg-red-400" />}
+                            </div>
+                            <div>
+                                <strong className={`block mb-1 ${selectedBossOption === 'A' ? 'text-red-300' : 'text-stone-200'}`}>選項 A：Modbus 任務衝突了！</strong>
+                                <span className="text-stone-300">因為 `ALARM_STATUS` 同時被放在 FC3 (讀取) 和 FC16 (寫入) 的任務裡。這兩個任務會互相打架，導致寫入失敗。應該要把 FC3 裡面的 `ALARM_STATUS` 刪掉。</span>
+                            </div>
+                        </div>
+                    </button>
+
+                    {/* Option B */}
+                    <button
+                        onClick={() => handleBossOptionSelect('B')}
+                        className={`w-full text-left p-5 rounded-xl border transition-all duration-200 ${selectedBossOption === 'B'
+                            ? 'bg-green-900/20 border-green-500/50'
+                            : 'bg-zinc-800 border-zinc-700/50 hover:border-amber-500/30 hover:bg-zinc-700/30'
+                            }`}
+                    >
+                        <div className="flex gap-4">
+                            <div className={`mt-0.5 w-6 h-6 shrink-0 rounded-full border-2 flex items-center justify-center ${selectedBossOption === 'B' ? 'border-green-400' : 'border-stone-500'}`}>
+                                {selectedBossOption === 'B' && <div className="w-3 h-3 rounded-full bg-green-400" />}
+                            </div>
+                            <div>
+                                <strong className={`block mb-1 ${selectedBossOption === 'B' ? 'text-green-300' : 'text-stone-200'}`}>選項 B：Channel 的身分類型錯了！</strong>
+                                <span className="text-stone-300">Modbus Protocol Mapping 寫得完全正確，錯誤出在 `Meter` 這個介面的 Channel 定義上。當初在寫 `ALARM_STATUS` 的身分證時，一定是不小心用了 `Doc.of(OpenemsType.BOOLEAN)`，而沒有加上 `.accessMode(AccessMode.READ_WRITE)`，導致它被判定成只能讀取的唯讀 Channel。</span>
+                            </div>
+                        </div>
+                    </button>
+
+                    {/* Option C */}
+                    <button
+                        onClick={() => handleBossOptionSelect('C')}
+                        className={`w-full text-left p-5 rounded-xl border transition-all duration-200 ${selectedBossOption === 'C'
+                            ? 'bg-red-900/20 border-red-500/50'
+                            : 'bg-zinc-800 border-zinc-700/50 hover:border-amber-500/30 hover:bg-zinc-700/30'
+                            }`}
+                    >
+                        <div className="flex gap-4">
+                            <div className={`mt-0.5 w-6 h-6 shrink-0 rounded-full border-2 flex items-center justify-center ${selectedBossOption === 'C' ? 'border-red-400' : 'border-stone-500'}`}>
+                                {selectedBossOption === 'C' && <div className="w-3 h-3 rounded-full bg-red-400" />}
+                            </div>
+                            <div>
+                                <strong className={`block mb-1 ${selectedBossOption === 'C' ? 'text-red-300' : 'text-stone-200'}`}>選項 C：地址映射跨距太大！</strong>
+                                <span className="text-stone-300">在 FC3 讀取任務中，你把地址 40010 和 40050 包在同一個 Task 裡面。因為中間跳躍了 40 個地址，這會導致硬體無法解讀，進而造成後續的寫入任務也跟著當機。</span>
+                            </div>
+                        </div>
+                    </button>
+                </div>
+
+                {/* Boss Feedback Section */}
+                {selectedBossOption && (
+                    <div className={`mt-6 p-5 rounded-xl border duration-300 ${selectedBossOption === 'B'
+                        ? 'bg-green-900/20 border-green-500/50 text-green-200'
+                        : 'bg-red-900/20 border-red-500/50 text-red-200'
+                        }`}>
+                        <div className="flex items-start gap-4">
+                            {selectedBossOption === 'B' ? (
+                                <CheckCircle2 className="w-6 h-6 shrink-0 mt-0.5 text-green-400" />
+                            ) : (
+                                <XCircle className="w-6 h-6 shrink-0 mt-0.5 text-red-400" />
+                            )}
+                            <div>
+                                <h4 className={`font-semibold text-lg mb-2 ${selectedBossOption === 'B' ? 'text-green-300' : 'text-red-300'}`}>
+                                    {selectedBossOption === 'B' ? '太神啦！你已經具備獨立開發 OpenEMS 設備模組的能力了！ 🏆' : '小心陷阱！錯誤訊息已經提示你了喔 🔍'}
+                                </h4>
+                                <div className="space-y-4 opacity-90 text-stone-200">
+                                    {selectedBossOption === 'A' && (
+                                        <p>這是最常見的誤區！在 OpenEMS 裡，同一個 Channel <strong>必須</strong>同時綁定讀取 (FC3) 與寫入 (FC16)，因為大腦需要隨時知道它目前的狀態，而且在每次寫入成功後，也要靠讀取任務來「驗證」是否真的改變了。所以這兩個任務不會打架，反而是最佳拍檔！</p>
+                                    )}
+                                    {selectedBossOption === 'C' && (
+                                        <p>雖然 Modbus 在讀取連續地址時效率最好，但 OpenEMS 底層非常聰明！如果你把 40010 和 40050 放在同一個 Task，它的底層套件會自動幫你計算：如果中間的空白地址加起來「小於」分兩次問的通訊成本，它就會一次讀回來再幫你切開；如果相差太遠，它也會自動拆成兩個封包去問。所以這不會造成寫入失敗喔！</p>
+                                    )}
+                                    {selectedBossOption === 'B' && (
+                                        <>
+                                            <p>沒錯！那個大大的 Error 訊息：<code>is not an instance of WriteChannel</code> 就是最大的鐵證！</p>
+                                            <p className="mt-2 text-stone-300">雖然你在 <strong className="text-amber-200">第三階 (Modbus)</strong> 把它綁到了 FC16 寫入任務，但因為你在 <strong className="text-amber-200">第一階 (Channel 介面宣告)</strong> 時，忘記幫它申請 <code>READ_WRITE</code> 的權限，導致 OpenEMS 核心大腦把它當成「唯讀」的。<br /><br />
+                                                就算 Modbus 準備好要幫你送信了，但 OpenEMS 大腦根本不允許 UI 按鈕產生寫入命令 (Next Write Value)！這就是結合「軟體抽象化 (Channel)」與「硬體通訊 (Modbus)」的經典 Bug！</p>
+                                        </>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </section>
         </div>
     );
