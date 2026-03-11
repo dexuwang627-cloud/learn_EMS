@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Network, Cable, Cpu, Link as LinkIcon, HelpCircle, AlertTriangle, CheckCircle2, XCircle, Building2, Server, ArrowRight, BookOpen, Edit3, Layers, Star, RefreshCcw, Code, Lightbulb } from 'lucide-react';
+import { Network, Cable, Cpu, Link as LinkIcon, HelpCircle, AlertTriangle, CheckCircle2, XCircle, Building2, Server, ArrowRight, BookOpen, Edit3, Layers, Star, RefreshCcw, Code, Lightbulb, MapPin } from 'lucide-react';
 
 const ConceptLink = ({ to, children }) => (
     <Link
