@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Network, Cable, Cpu, Link as LinkIcon, HelpCircle, AlertTriangle, CheckCircle2, XCircle, Building2, Server, ArrowRight, BookOpen, Edit3, Layers, Star } from 'lucide-react';
+import { Network, Cable, Cpu, Link as LinkIcon, HelpCircle, AlertTriangle, CheckCircle2, XCircle, Building2, Server, ArrowRight, BookOpen, Edit3, Layers, Star, RefreshCcw, Code, Lightbulb } from 'lucide-react';
 
 const ConceptLink = ({ to, children }) => (
     <Link
@@ -591,7 +591,71 @@ const ModbusPage = () => {
                                 </h4>
                                 <p className="leading-relaxed opacity-90 text-stone-200">
                                     {selectedMappingOption === 'A' && 'FC3 是純粹的「讀取指令」，底層的 Modbus 協議是不允許你用 FC3 來修改設定的。如果我們不給它 FC16 的任務配置，再怎麼聰明的軟體也不能直接突破硬體協定的限制去寫入資料。'}
-                                    {selectedMappingOption === 'B' && '這個直覺太好了！沒錯，對於「可讀可寫」的設定值，我們必須確保 OpenEMS 知道它的目前設定（因此放進 FC3 定期輪詢），又要提供修改的管道（因此加入 FC16）。OpenEMS 的 m() 魔法支援同一個 ChannelId 同時綁定在讀取與寫入任務中，讓它完美實現雙向同步！'}
+                                    {selectedMappingOption === 'B' && (
+                                        <div className="space-y-5 mt-3">
+                                            <p className="text-green-100 text-base">你已經完全掌握了工業控制裡「讀寫分離」的核心邏輯！OpenEMS 雖然很聰明，但它絕對不會擅自幫你決定哪個地址可以寫入，這一切都必須由工程師（你）來嚴格定義。</p>
+                                            
+                                            <div className="bg-zinc-900/50 rounded-xl p-5 border border-green-500/20 text-stone-300 shadow-inner">
+                                                <h5 className="text-emerald-400 font-bold mb-3 flex items-center gap-2">
+                                                    <RefreshCcw className="w-4 h-4" />
+                                                    為什麼 40200 (最大充電功率) 需要同時「讀」又「寫」？
+                                                </h5>
+                                                <ul className="space-y-4 text-sm leading-relaxed">
+                                                    <li><strong className="text-red-300">只有寫入 (FC16)：</strong> 你的控制器想把功率調降 500W，但因為你沒讀取，你根本不知道現在設備上的設定值是多少！你成了「瞎子摸象」，只能盲目發送絕對數值。</li>
+                                                    <li><strong className="text-green-300">同時有讀取 (FC3) 和寫入 (FC16)：</strong> OpenEMS 會在背景每秒鐘用 FC3 去問硬體：「你現在的設定值是多少？」並更新到 Channel 裡。當你的 Controller 決定要改變功率時，它會觸發 FC16 把新數字寫進硬體。這樣 OpenEMS 永遠能和實體設備保持「狀態同步」！</li>
+                                                </ul>
+                                            </div>
+
+                                            <div className="bg-zinc-950/80 rounded-xl overflow-hidden border border-zinc-700/50 shadow-md">
+                                                <div className="bg-zinc-800/80 px-4 py-3 border-b border-zinc-700/50">
+                                                    <span className="font-mono text-amber-500 text-sm font-medium flex items-center gap-2">
+                                                        <Code className="w-4 h-4" />
+                                                        實戰魔法：OpenEMS 的 m() 映射語法
+                                                    </span>
+                                                </div>
+                                                <pre className="p-5 overflow-x-auto text-xs lg:text-sm font-mono leading-loose">
+                                                    <code className="text-stone-300">
+                                                        <span className="text-purple-400">@Override</span><br />
+                                                        <span className="text-purple-400">protected</span> ModbusProtocol <span className="text-blue-400">defineModbusProtocol</span>() {'{'}<br />
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-purple-400">return new</span> ModbusProtocol(<span className="text-purple-400">this</span>,<br />
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-stone-500">// 📖 任務一：讀取任務 (FC3) - 每秒鐘不斷去問現況</span><br />
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-purple-400">new</span> FC3ReadRegistersTask(<span className="text-orange-300">40100</span>, Priority.<span className="text-blue-400">HIGH</span>,<br />
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-yellow-200">m</span>(Battery.ChannelId.<span className="text-blue-400">TEMPERATURE</span>, <span className="text-purple-400">new</span> UnsignedWordElement(<span className="text-orange-300">40100</span>)),<br />
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-stone-500">// 這裡也讀取 40200，隨時掌握硬體當前的設定值</span><br />
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-yellow-200">m</span>(Battery.ChannelId.<span className="text-blue-400">MAX_CHARGE_POWER</span>, <span className="text-purple-400">new</span> UnsignedWordElement(<span className="text-orange-300">40200</span>))<br /> 
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;),<br /><br />
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-stone-500">// ✍️ 任務二：寫入任務 (FC16) - 只有當 Controller 下達指令時才會觸發</span><br />
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-purple-400">new</span> FC16WriteRegistersTask(<span className="text-orange-300">40200</span>,<br />
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-stone-500">// 當大腦想修改 MAX_CHARGE_POWER 時，就把數字轉成指令送到 40200</span><br />
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-yellow-200">m</span>(Battery.ChannelId.<span className="text-blue-400">MAX_CHARGE_POWER</span>, <span className="text-purple-400">new</span> UnsignedWordElement(<span className="text-orange-300">40200</span>))<br />
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)<br />
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;);<br />
+                                                        {'}'}
+                                                    </code>
+                                                </pre>
+                                            </div>
+                                            
+                                            <div className="bg-amber-900/10 rounded-xl p-5 border border-amber-500/20 flex gap-4 items-start shadow-sm mt-2">
+                                                <div className="p-1.5 bg-amber-500/20 rounded-lg shrink-0 mt-0.5">
+                                                    <Lightbulb className="w-5 h-5 text-amber-400" />
+                                                </div>
+                                                <div>
+                                                    <h5 className="text-amber-400 font-bold mb-2">呼應第一階段的記憶點：還記得 Doc.of() 嗎？</h5>
+                                                    <p className="text-sm leading-relaxed mb-3">
+                                                        為了讓 <code>MAX_CHARGE_POWER</code> 可以被寫入，你在定義這個通道的「身分證」時，必須多加一個屬性：
+                                                    </p>
+                                                    <div className="bg-zinc-950 p-3 rounded-md border border-zinc-800">
+                                                        <code className="text-amber-200 text-sm font-mono break-all">
+                                                            Doc.of(OpenemsType.INTEGER).accessMode(AccessMode.READ_WRITE)
+                                                        </code>
+                                                    </div>
+                                                    <p className="text-sm leading-relaxed mt-3">
+                                                        如果沒加上 <code>READ_WRITE</code>，就算你在 Modbus 裡寫了 FC16，OpenEMS 大腦還是會把你擋下來，這就是系統層層保護的防呆機制！
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
                                 </p>
                             </div>
                         </div>
