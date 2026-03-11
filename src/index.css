@@ -1,38 +1,39 @@
 @import "tailwindcss";
 
 @theme {
-  /* ── Midnight Galaxy Theme ── */
+  /* ── Anthropic / Claude Code Theme ── */
 
-  /* Background scale (Deep Purple base) */
-  --color-zinc-950: #1e1530;
-  --color-zinc-900: #2b1e3e;
-  --color-zinc-800: #372b4e;
-  --color-zinc-700: #4a3d63;
-  --color-zinc-600: #5d5078;
+  /* Background scale (Dark #141413 base) */
+  --color-zinc-950: #0c0c0b;
+  --color-zinc-900: #141413;
+  --color-zinc-800: #1e1e1c;
+  --color-zinc-700: #2d2d2a;
+  --color-zinc-600: #3d3d39;
 
-  /* Text scale (Silver base) */
-  --color-stone-100: #f0eef8;
-  --color-stone-200: #e6e6fa;
-  --color-stone-300: #c8c4db;
-  --color-stone-400: #9b96b0;
-  --color-stone-500: #7a7590;
-  --color-stone-600: #5d5873;
+  /* Text scale (Light #faf9f5 base) */
+  --color-stone-100: #faf9f5;
+  --color-stone-200: #f0efe8;
+  --color-stone-300: #e8e6dc;
+  --color-stone-400: #b0aea5;
+  --color-stone-500: #8a8880;
+  --color-stone-600: #6a685f;
 
-  /* Accent scale (Lavender / Cosmic Blue) */
-  --color-amber-200: #d6cee8;
-  --color-amber-300: #c8bde0;
-  --color-amber-400: #b5a3d1;
-  --color-amber-500: #a490c2;
-  --color-amber-900: #2d1f42;
+  /* Accent scale (Orange #d97757) */
+  --color-amber-200: #f0c4b3;
+  --color-amber-300: #e8a88f;
+  --color-amber-400: #e09070;
+  --color-amber-500: #d97757;
+  --color-amber-900: #2a1710;
 
-  --color-base: #2b1e3e;
-  --color-text-main: #e6e6fa;
-  --font-sans: "FreeSans", "Helvetica Neue", Arial, sans-serif;
+  --color-base: #141413;
+  --color-text-main: #faf9f5;
+  --font-heading: "Poppins", Arial, sans-serif;
+  --font-body: "Lora", Georgia, serif;
 }
 
 @layer base {
   body {
     @apply bg-zinc-900 text-stone-200 antialiased;
-    font-family: var(--font-sans);
+    font-family: var(--font-body);
   }
 }
