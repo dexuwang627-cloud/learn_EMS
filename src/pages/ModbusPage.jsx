@@ -33,11 +33,11 @@ const ModbusPage = () => {
     return (
         <div className="max-w-4xl mx-auto space-y-8 pb-16">
             <header className="space-y-4">
-                <h1 className="text-4xl md:text-5xl font-bold text-amber-50 leading-tight">
+                <h1 className="text-4xl md:text-5xl font-bold text-stone-200 leading-tight">
                     什麼是 Modbus？<br />
-                    <span className="text-amber-500">工業界的「世界語」</span>
+                    <span className="text-stone-200">工業界的「世界語」</span>
                 </h1>
-                <p className="text-lg text-amber-100/90 leading-relaxed max-w-2xl">
+                <p className="text-lg text-stone-300 leading-relaxed max-w-2xl">
                     如果 OpenEMS 是一間講「Java 語」的跨國智慧能源總部，那麼散佈在機房裡的太陽能逆變器、電池櫃、電表，就是講著各種方言的當地員工。
                 </p>
             </header>
@@ -53,11 +53,11 @@ const ModbusPage = () => {
                             onClick={() => setActiveTab(tab.id)}
                             className={`flex items-center gap-2 px-5 py-3 rounded-xl font-medium transition-all duration-300 flex-1 min-w-[140px] justify-center ${
                                 isActive
-                                    ? 'bg-amber-500/20 text-amber-400 shadow-sm border border-amber-500/30'
-                                    : 'text-amber-100/60 hover:text-amber-300 hover:bg-zinc-800/50 border border-transparent'
+                                    ? 'bg-amber-500/20 text-stone-200 shadow-sm border border-amber-500/30'
+                                    : 'text-stone-100/60 hover:text-stone-300 hover:bg-zinc-800/50 border border-transparent'
                             }`}
                         >
-                            <Icon className={`w-4 h-4 ${isActive ? 'text-amber-400' : 'text-amber-100/40'}`} />
+                            <Icon className={`w-4 h-4 ${isActive ? 'text-stone-200' : 'text-stone-100/40'}`} />
                             {tab.label}
                         </button>
                     );
