@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Network, Cable, Cpu, Link as LinkIcon, HelpCircle, AlertTriangle, CheckCircle2, XCircle, Building2, Server, MapPin, ArrowRight, BookOpen, Layers, Edit3 } from 'lucide-react';
+import { Network, Cable, Cpu, Link as LinkIcon, HelpCircle, AlertTriangle, CheckCircle2, XCircle, Building2, Server, ArrowRight, BookOpen, Edit3, Layers, Star } from 'lucide-react';
 
 const ConceptLink = ({ to, children }) => (
     <Link
@@ -597,6 +597,68 @@ const ModbusPage = () => {
                         </div>
                     </div>
                 )}
+            </section>
+
+            {/* Priority 3 Summary */}
+            <section className="bg-gradient-to-br from-indigo-900/40 to-blue-900/20 rounded-2xl p-6 md:p-8 border border-indigo-500/30 space-y-6 mt-12 mb-8 shadow-lg shadow-indigo-900/20">
+                <div className="flex items-center gap-3 border-b border-indigo-500/30 pb-4">
+                    <div className="p-2 bg-indigo-500/20 rounded-lg">
+                        <Star className="w-6 h-6 text-indigo-400" />
+                    </div>
+                    <h2 className="text-2xl font-bold text-stone-100 flex-1">OpenEMS 第 3 優先總結：Modbus 通訊與軟硬體映射</h2>
+                </div>
+
+                <p className="text-stone-300 leading-relaxed text-lg">
+                    如果說前兩階的 OSGi 和 Channel 是系統的「大腦與神經」，那麼 Modbus 就是讓大腦能夠控制四肢（實體設備）的<strong className="text-indigo-300">「跨國翻譯部」</strong>。
+                </p>
+
+                <div className="grid lg:grid-cols-3 gap-6 mt-6">
+                    {/* Core Point 1 */}
+                    <div className="bg-zinc-900/70 rounded-xl p-6 border border-zinc-700/50 flex flex-col h-full hover:border-emerald-500/30 transition-colors">
+                        <div className="flex items-center gap-2 mb-4">
+                            <span className="bg-emerald-500/20 text-emerald-400 p-1.5 rounded-lg">
+                                <Network className="w-5 h-5" />
+                            </span>
+                            <h3 className="text-lg font-semibold text-emerald-400">一、IT 與 OT 實體交匯</h3>
+                        </div>
+                        <ul className="space-y-3 text-stone-300 text-sm md:text-base flex-1">
+                            <li><strong className="text-stone-200">OT 端 (屋頂)：</strong> 設備使用 Modbus RTU (RS485) 串接，必須設定獨立的 <span className="text-amber-400">站號 (Unit ID)</span>。</li>
+                            <li><strong className="text-stone-200">Gateway (變形金剛)：</strong> 將 RS485 電訊號轉為 TCP 網路封包。</li>
+                            <li><strong className="text-stone-200">IT 端 (機房)：</strong> 透過一樓網路線 (Cat.6) 以 <span className="text-amber-400">IP 地址</span> 尋找 Gateway。</li>
+                        </ul>
+                    </div>
+
+                    {/* Core Point 2 */}
+                    <div className="bg-zinc-900/70 rounded-xl p-6 border border-zinc-700/50 flex flex-col h-full hover:border-blue-500/30 transition-colors">
+                        <div className="flex items-center gap-2 mb-4">
+                            <span className="bg-blue-500/20 text-blue-400 p-1.5 rounded-lg">
+                                <Cpu className="w-5 h-5" />
+                            </span>
+                            <h3 className="text-lg font-semibold text-blue-400">二、軟體依賴 (主從關係)</h3>
+                        </div>
+                        <ul className="space-y-3 text-stone-300 text-sm md:text-base flex-1">
+                            <li><strong className="text-stone-200">Bridge (翻譯官)：</strong> 負責實體連線，填寫 Gateway IP。</li>
+                            <li><strong className="text-stone-200">Device (外籍員工)：</strong> 設備邏輯模組，填寫 Unit ID。</li>
+                            <li><strong className="text-red-300">生死依賴：</strong> Device 必須用 <code>@Reference(STATIC)</code> 綁定 Bridge，沒翻譯官就強制死機保護！</li>
+                        </ul>
+                    </div>
+
+                    {/* Core Point 3 */}
+                    <div className="bg-zinc-900/70 rounded-xl p-6 border border-zinc-700/50 flex flex-col h-full hover:border-purple-500/30 transition-colors">
+                        <div className="flex items-center gap-2 mb-4">
+                            <span className="bg-purple-500/20 text-purple-400 p-1.5 rounded-lg">
+                                <Layers className="w-5 h-5" />
+                            </span>
+                            <h3 className="text-lg font-semibold text-purple-400">三、Protocol Mapping</h3>
+                        </div>
+                        <ul className="space-y-3 text-stone-300 text-sm md:text-base flex-1">
+                            <li><strong className="text-stone-200">FC3 (讀取)：</strong> 每秒問現況 (如當前溫度)。</li>
+                            <li><strong className="text-stone-200">FC16 (寫入)：</strong> 改變狀態時觸發 (如命令放電)。</li>
+                            <li><strong className="text-stone-200">m() 魔法：</strong> 把硬體地址綁到這兩類的 Channel 上。</li>
+                            <li><strong className="text-amber-300">雙向綁定：</strong> 可修改的屬性須同時放入 FC3 與 FC16，這就是 <code>READ_WRITE</code>。</li>
+                        </ul>
+                    </div>
+                </div>
             </section>
         </div>
     );
