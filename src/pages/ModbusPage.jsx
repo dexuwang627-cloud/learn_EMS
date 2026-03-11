@@ -32,13 +32,17 @@ const ModbusPage = () => {
 
     return (
         <div className="max-w-4xl mx-auto space-y-8 pb-16">
-            <header className="space-y-4">
-                <h1 className="text-4xl md:text-5xl font-bold text-stone-200 leading-tight">
-                    什麼是 Modbus？<br />
-                    <span className="text-stone-200">工業界的「世界語」</span>
+            {/* Page Header */}
+            <header className="space-y-4 py-8">
+                <div className="flex items-center gap-3 text-amber-500 mb-2">
+                    <div className="h-0.5 w-12 bg-amber-500"></div>
+                    <span className="text-sm font-bold tracking-widest uppercase">Priority 3</span>
+                </div>
+                <h1 className="text-4xl md:text-5xl font-extrabold text-stone-100 tracking-tight">
+                    Modbus 協議模式：<span className="text-amber-500">工業界的「世界語」</span>
                 </h1>
-                <p className="text-lg text-stone-300 leading-relaxed max-w-2xl">
-                    如果 OpenEMS 是一間講「Java 語」的跨國智慧能源總部，那麼散佈在機房裡的太陽能逆變器、電池櫃、電表，就是講著各種方言的當地員工。
+                <p className="text-xl text-stone-400 max-w-3xl leading-relaxed">
+                    如果 OpenEMS 是講「Java 語」的總部，那麼散佈在機房裡的設備就是講著各種方言的員工。掌握 Modbus，就是掌握與物聯網硬體溝通的關鍵。
                 </p>
             </header>
 

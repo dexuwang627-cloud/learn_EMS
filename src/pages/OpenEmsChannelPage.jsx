@@ -5,14 +5,17 @@ export default function OpenEmsChannelPage() {
     return (
         <div className="max-w-4xl mx-auto space-y-16 animate-in fade-in slide-in-from-bottom-4 duration-700">
 
-            {/* Header */}
-            <header className="border-b border-zinc-800 pb-8">
-                <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-stone-100 mb-4 leading-tight">
-                    OpenEMS 資料通道與風險控管
+            {/* Page Header */}
+            <header className="space-y-4 py-8">
+                <div className="flex items-center gap-3 text-amber-500 mb-2">
+                    <div className="h-0.5 w-12 bg-amber-500"></div>
+                    <span className="text-sm font-bold tracking-widest uppercase">Priority 2</span>
+                </div>
+                <h1 className="text-4xl md:text-5xl font-extrabold text-stone-100 tracking-tight">
+                    OpenEMS <span className="text-amber-500">資料通道</span> 與 <span className="text-amber-500">風險控管</span>
                 </h1>
-                <p className="text-xl text-amber-500/90 font-medium mb-6">次主題二總結</p>
-                <p className="text-lg text-stone-400 leading-relaxed border-l-4 border-amber-500/30 pl-4 py-1">
-                    在 OpenEMS 的世界裡，Channel (通道) 就是負責在各個硬體與大腦之間傳遞數據的血管。血管裡流的血如果不乾淨或不新鮮，整個系統就會生病，甚至引發災難。
+                <p className="text-xl text-stone-400 max-w-3xl leading-relaxed">
+                    在 OpenEMS 的世界裡，Channel 就是負責傳遞數據的血管。掌握資料定義與異常處理，確保系統大腦運作正確。
                 </p>
             </header>
 

@@ -7,22 +7,20 @@ import { TerminalSquare } from 'lucide-react';
 
 export default function OsgiPage() {
     return (
-        <div className="space-y-8 md:space-y-12 max-w-5xl mx-auto">
-            {/* Intro Section */}
-            <div className="flex flex-col md:flex-row gap-6 mb-12 items-start md:items-center bg-zinc-800/40 border border-zinc-700/50 p-6 md:p-8 rounded-3xl shadow-sm">
-                <div className="bg-zinc-800 p-4 rounded-full text-stone-300 shrink-0 shadow-inner">
-                    <TerminalSquare className="w-8 h-8" />
+        <div className="max-w-5xl mx-auto space-y-16 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            {/* Page Header */}
+            <header className="space-y-4 py-8">
+                <div className="flex items-center gap-3 text-amber-500 mb-2">
+                    <div className="h-0.5 w-12 bg-amber-500"></div>
+                    <span className="text-sm font-bold tracking-widest uppercase">Priority 1</span>
                 </div>
-                <div>
-                    <h2 className="text-lg md:text-xl font-medium text-stone-200 mb-3">這份筆記能學到什麼？</h2>
-                    <p className="text-stone-200 text-sm md:text-base leading-relaxed font-medium">
-                        主要整理自 OSGi 的生命週期管理與 Declarative Services (DS) 設定方式。
-                        重點在於理解模組的 <span className="text-stone-100 font-bold bg-zinc-700/80 px-2 py-0.5 rounded border border-zinc-600">生死（Lifecycle）</span>、
-                        它對其它服務的 <span className="text-stone-100 font-bold bg-zinc-700/80 px-2 py-0.5 rounded border border-zinc-600">態度（Policy）</span> 與
-                        <span className="text-stone-100 font-bold bg-zinc-700/80 px-2 py-0.5 rounded border border-zinc-600">底線（Cardinality）</span>。
-                    </p>
-                </div>
-            </div>
+                <h1 className="text-4xl md:text-5xl font-extrabold text-stone-100 tracking-tight">
+                    OSGi <span className="text-amber-500">生命週期</span> 與 <span className="text-amber-500">依賴管理</span>
+                </h1>
+                <p className="text-xl text-stone-400 max-w-3xl leading-relaxed">
+                    理解 OpenEMS 模組的生死與底線。掌握 Declarative Services (DS) 設定，確保服務之間的依賴關係穩定且可預測。
+                </p>
+            </header>
 
             <LifecycleTimeline data={lifecycleData} />
             <DependencyDimensions data={dependencyDimensions} />

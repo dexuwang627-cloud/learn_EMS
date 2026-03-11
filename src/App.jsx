@@ -5,6 +5,8 @@ import OsgiPage from './pages/OsgiPage';
 import PlaceholderPage from './pages/PlaceholderPage';
 import OpenEmsChannelPage from './pages/OpenEmsChannelPage';
 import ModbusPage from './pages/ModbusPage';
+import EnergyDomainPage from './pages/EnergyDomainPage';
+import BuildToolsPage from './pages/BuildToolsPage';
 
 function App() {
   return (
@@ -19,8 +21,8 @@ function App() {
               <Route path="/osgi" element={<OsgiPage />} />
               <Route path="/openems-channel" element={<OpenEmsChannelPage />} />
               <Route path="/modbus" element={<ModbusPage />} />
-              <Route path="/energy-domain" element={<PlaceholderPage title="這份筆記能學到什麼？" subtitle="即將匯入：ESS、功率方向、Deye 設備等 Energy Domain 判斷邏輯" />} />
-              <Route path="/build-tools" element={<PlaceholderPage title="這份筆記能學到什麼？" subtitle="即將匯入：Gradle 與 BND 建構慣例，快速診斷 CI 失敗" />} />
+              <Route path="/energy-domain" element={<EnergyDomainPage />} />
+              <Route path="/build-tools" element={<BuildToolsPage />} />
               <Route path="/testing" element={<PlaceholderPage title="這份筆記能學到什麼？" subtitle="即將匯入：ComponentTest 框架，快速驗證修改是否正確" />} />
               <Route path="/database" element={<PlaceholderPage title="這份筆記能學到什麼？" subtitle="即將匯入：Database 連線池與備用資料庫等相關知識" />} />
 
