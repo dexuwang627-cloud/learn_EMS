@@ -25,8 +25,8 @@
   --color-amber-500: #d97757;
   --color-amber-900: #2a1710;
 
-  --color-base: #141413;
-  --color-text-main: #faf9f5;
+  --theme-bg-base: #141413;
+  --theme-text-main: #faf9f5;
   --font-heading: "Poppins", Arial, sans-serif;
   --font-body: "Lora", Georgia, serif;
 }
